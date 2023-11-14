@@ -1,7 +1,10 @@
 export function newFirebaseBeacon(url) {
   function getBeaconUrl() { return url + formPath() + '.json' }
-  function formPath() { return getDate() + '/' + getId() }
-  function getId() { return 'asdfasdf1212' }
+  function formPath() { return getDate() + '/' + beaconid }
+  function getId() { 
+    let id = readCookie('beaconid') || makeid(8) + '_' + new Date().getTime() || '12345678' + '_' + new Date().getTime()
+    setCookie('beaconid', id)
+    return id }
   function getDate() {
     const options = {
       year: 'numeric',
@@ -10,6 +13,40 @@ export function newFirebaseBeacon(url) {
     };
     return new Date(Date.now()).toLocaleDateString('en-ZA', options)
   }
+  function makeid(length) {
+      let result = '';
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      const charactersLength = characters.length;
+      let counter = 0;
+      while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+      }
+      return result;
+  } 
+  function readCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+  function setCookie(key,value) {
+    const d = new Date();
+    d.setTime(d.getTime() + (180*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = key + "=" + value + ";" + expires + ";path=/";
+    return readCookie(key)
+  }
+  const beaconid = getId() 
   const endpoint = getBeaconUrl()
   const send = function (data) { return navigator.sendBeacon(endpoint, JSON.stringify(data)) }
   const navigatorInfo = {}
@@ -53,7 +90,7 @@ export function newFirebaseBeacon(url) {
       innerHeight, innerWidth, outerHeight, outerWidth, pageXOffset, pageYOffset, closed,
       ...sbjsInfo,
       ...navigatorInfo,
-       ...performanceInfo
+      ...performanceInfo
     })
     return timestamp
   }
