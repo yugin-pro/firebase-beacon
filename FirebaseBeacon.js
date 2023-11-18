@@ -53,27 +53,6 @@ export function newFirebaseBeacon(url) {
   navigatorInfo.platform = window.navigator.platform
   navigatorInfo.language = window.navigator.language
 
-  const performanceInfo = {}
-  performanceInfo.connectEnd = performance.timing.connectEnd
-  performanceInfo.connectStart = performance.timing.connectStart
-  performanceInfo.domComplete = performance.timing.domComplete
-  performanceInfo.domContentLoadedEventEnd = performance.timing.domContentLoadedEventEnd
-  performanceInfo.domContentLoadedEventStart = performance.timing.domContentLoadedEventStart
-  performanceInfo.domInteractive = performance.timing.domInteractive
-  performanceInfo.domLoading = performance.timing.domLoading
-  performanceInfo.domainLookupEnd = performance.timing.domainLookupEnd
-  performanceInfo.domainLookupStart = performance.timing.domainLookupStart
-  performanceInfo.fetchStart = performance.timing.fetchStart
-  performanceInfo.loadEventEnd = performance.timing.loadEventEnd
-  performanceInfo.loadEventStart = performance.timing.loadEventStart
-  performanceInfo.navigationStart = performance.timing.navigationStart
-  performanceInfo.redirectEnd = performance.timing.redirectEnd
-  performanceInfo.redirectStart = performance.timing.redirectStart
-  performanceInfo.requestStart = performance.timing.requestStart
-  performanceInfo.responseEnd = performance.timing.responseEnd
-  performanceInfo.responseStart = performance.timing.responseStart
-  performanceInfo.secureConnectionStart = performance.timing.secureConnectionStart
-
 
   return function (type, content) {
     let timestamp = Date.now()
@@ -89,8 +68,7 @@ export function newFirebaseBeacon(url) {
       timestamp, type, content,
       innerHeight, innerWidth, outerHeight, outerWidth, pageXOffset, pageYOffset, closed,
       ...sbjsInfo,
-      ...navigatorInfo,
-      ...performanceInfo
+      ...navigatorInfo
     })
     return timestamp
   }
