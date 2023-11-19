@@ -49,14 +49,27 @@ export function newFirebaseBeacon(url) {
   const beaconid = getId() 
   const endpoint = getBeaconUrl()
   const send = function (data) { return navigator.sendBeacon(endpoint, JSON.stringify(data)) }
+
   const navigatorInfo = {}
-  navigatorInfo.platform = window.navigator.platform
-  navigatorInfo.language = window.navigator.language
+    navigatorInfo.cookieEnabled = navigator.cookieEnabled
+    navigatorInfo.language = navigator.language
+    navigatorInfo.maxTouchPoints = navigator.maxTouchPoints
+    navigatorInfo.pdfViewerEnabled = navigator.pdfViewerEnabled
+    if("serviceWorker" in navigator) {navigatorInfo.serviceWorker = true} else {navigatorInfo.serviceWorker = false}
+    navigatorInfo.userAgent = navigator.userAgent
+
+  const documentInfo = {}
+  documentInfo.referrer = document.referrer
+  documentInfo.title = document.title
+  documentInfo.URL = document.URL
+  documentInfo.visibilityState = document.visibilityState
+  documentInfo.fullscreenEnabled = document.fullscreenEnabled
 
 
   return function (type, content) {
     let timestamp = Date.now()
-    let platform = window.navigator.platform
+    let historyState = window.history.state
+    let historyLength = window.history.length
     let sbjsInfo = typeof sbjs === 'object' ? {      
       current: sbjs.get.current,
       current_add: sbjs.get.current_add,
@@ -65,10 +78,11 @@ export function newFirebaseBeacon(url) {
       promo: sbjs.get.promo
     } : {sbjs: 'not defined'}
     send({
-      timestamp, type, content,
-      innerHeight, innerWidth, outerHeight, outerWidth, pageXOffset, pageYOffset, closed,
+      timestamp, type, content, historyState, historyLength, devicePixelRatio,
+      innerHeight, innerWidth, outerHeight, outerWidth, pageXOffset, pageYOffset,
       ...sbjsInfo,
-      ...navigatorInfo
+      ...navigatorInfo,
+      ...documentInfo
     })
     return timestamp
   }
