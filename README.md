@@ -1,5 +1,6 @@
 # firebase-beacon
-light-waight java script library for collecting browser data using [beacon api]('https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API') and firebase [realtime database]('https://firebase.google.com/docs/database')
+
+Lightweight JavaScript library for collecting browser data using the [Beacon API]('https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API') and [Firebase Realtime Database]('https://firebase.google.com/docs/database')
 
 # Installation
 
